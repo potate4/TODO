@@ -30,7 +30,7 @@ export function Header() {
   };
 
   return (
-    <header className="bg-gradient-to-r from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-b border-gray-200/80 dark:border-gray-700/80 sticky top-0 z-20 shadow-sm">
+    <header className="bg-gradient-to-r from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-b-2 border-gray-300 dark:border-gray-600 sticky top-0 z-20 shadow-md">
       <div className="container mx-auto px-6 py-5">
         <div className="flex items-center justify-between">
           <div>

@@ -35,7 +35,7 @@ export function EventsSection({ day, date }: EventsSectionProps) {
 
   return (
     <>
-      <div className="border-t-2 border-gray-200 dark:border-gray-800 bg-gradient-to-b from-gray-50/50 to-white dark:from-gray-800/30 dark:to-gray-900">
+      <div className="border-t-2 border-gray-300 dark:border-gray-600 bg-gradient-to-b from-gray-50/50 to-white dark:from-gray-800/30 dark:to-gray-900 shadow-inner">
         <div className="flex items-center justify-between px-4 py-3">
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
