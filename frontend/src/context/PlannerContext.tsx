@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import type { Task, DayOfWeek, Event } from '../types/planner';
 import { useLocalStorage, useEventsStorage } from '../hooks/useLocalStorage';
-import { getWeekStart, getPreviousWeek, getNextWeek, getDateForDay } from '../utils/dateUtils';
+import { getWeekStart, getPreviousWeek, getNextWeek, getDateForDay, formatDateISO } from '../utils/dateUtils';
 
 interface PlannerContextType {
   // Week navigation
@@ -17,11 +17,11 @@ interface PlannerContextType {
   updateTask: (id: string, updates: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   toggleTaskComplete: (id: string) => void;
-  moveTask: (taskId: string, newDay: DayOfWeek, newTimeSlot: string) => void;
+  moveTask: (taskId: string, newDay: DayOfWeek, newDate: Date, newTimeSlot: string) => void;
   
   // Task queries
-  getTasksForDay: (day: DayOfWeek) => Task[];
-  getTasksForTimeSlot: (day: DayOfWeek, timeSlot: string) => Task[];
+  getTasksForDay: (day: DayOfWeek, date: Date) => Task[];
+  getTasksForTimeSlot: (day: DayOfWeek, date: Date, timeSlot: string) => Task[];
   
   // Task creation helper
   createTask: (
@@ -38,7 +38,7 @@ interface PlannerContextType {
   addEvent: (event: Event) => void;
   updateEvent: (id: string, updates: Partial<Event>) => void;
   deleteEvent: (id: string) => void;
-  getEventsForDay: (day: DayOfWeek) => Event[];
+  getEventsForDay: (day: DayOfWeek, date: Date) => Event[];
   createEvent: (
     title: string,
     day: DayOfWeek,
@@ -83,16 +83,18 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const getTasksForDay = useCallback(
-    (day: DayOfWeek): Task[] => {
-      return tasks.filter(task => task.day === day);
+    (day: DayOfWeek, date: Date): Task[] => {
+      const dateStr = formatDateISO(date);
+      return tasks.filter(task => task.date === dateStr);
     },
     [tasks]
   );
 
   const getTasksForTimeSlot = useCallback(
-    (day: DayOfWeek, timeSlot: string): Task[] => {
+    (day: DayOfWeek, date: Date, timeSlot: string): Task[] => {
+      const dateStr = formatDateISO(date);
       return tasks.filter(
-        task => task.day === day && task.timeSlot === timeSlot
+        task => task.date === dateStr && task.timeSlot === timeSlot
       );
     },
     [tasks]
@@ -102,6 +104,7 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     (
       title: string,
       day: DayOfWeek,
+      date: Date,
       timeSlot: string,
       color: string = '#3b82f6',
       description?: string,
@@ -113,6 +116,7 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
         title,
         description,
         day,
+        date: formatDateISO(date),
         timeSlot,
         completed: false,
         color,
@@ -125,15 +129,16 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
   );
 
   const moveTask = useCallback(
-    (taskId: string, newDay: DayOfWeek, newTimeSlot: string) => {
-      moveTaskStorage(taskId, newDay, newTimeSlot);
+    (taskId: string, newDay: DayOfWeek, newDate: Date, newTimeSlot: string) => {
+      moveTaskStorage(taskId, newDay, formatDateISO(newDate), newTimeSlot);
     },
     [moveTaskStorage]
   );
 
   const getEventsForDay = useCallback(
-    (day: DayOfWeek): Event[] => {
-      return events.filter(event => event.day === day);
+    (day: DayOfWeek, date: Date): Event[] => {
+      const dateStr = formatDateISO(date);
+      return events.filter(event => event.date === dateStr);
     },
     [events]
   );
@@ -142,6 +147,7 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     (
       title: string,
       day: DayOfWeek,
+      date: Date,
       color: string = '#3b82f6',
       description?: string,
       isAllDay: boolean = true,
@@ -154,6 +160,7 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
         title,
         description,
         day,
+        date: formatDateISO(date),
         isAllDay,
         startTime,
         endTime,

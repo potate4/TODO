@@ -2,7 +2,8 @@ export interface Task {
   id: string;
   title: string;
   description?: string;
-  day: DayOfWeek;
+  day: DayOfWeek;      // Kept for backward compatibility and display
+  date: string;        // ISO date string (YYYY-MM-DD) - primary identifier
   timeSlot: string;   // Format: '06:00', '07:00', etc.
   completed: boolean;
   color: string;      // hex color code
@@ -15,7 +16,8 @@ export interface Event {
   id: string;
   title: string;
   description?: string;
-  day: DayOfWeek;
+  day: DayOfWeek;      // Kept for backward compatibility and display
+  date: string;        // ISO date string (YYYY-MM-DD) - primary identifier
   isAllDay: boolean;
   startTime?: string;  // Format: '06:00' - only if not all day
   endTime?: string;    // Format: '18:00' - only if not all day

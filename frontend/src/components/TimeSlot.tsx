@@ -8,22 +8,23 @@ import { TaskForm } from './TaskForm';
 
 interface TimeSlotProps {
   day: DayOfWeek;
+  date: Date;
   timeSlot: string;
   label: string;
 }
 
 const MAX_VISIBLE_TASKS = 3;
 
-export function TimeSlot({ day, timeSlot, label }: TimeSlotProps) {
+export function TimeSlot({ day, date, timeSlot, label }: TimeSlotProps) {
   const { getTasksForTimeSlot } = usePlanner();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   const { setNodeRef, isOver } = useDroppable({
-    id: `drop-${day}-${timeSlot}`,
+    id: `drop-${day}|${date.getTime()}|${timeSlot}`,
   });
 
-  const tasks = getTasksForTimeSlot(day, timeSlot);
+  const tasks = getTasksForTimeSlot(day, date, timeSlot);
   const visibleTasks = tasks.slice(0, MAX_VISIBLE_TASKS);
   const overflowCount = tasks.length - MAX_VISIBLE_TASKS;
 
@@ -96,6 +97,7 @@ export function TimeSlot({ day, timeSlot, label }: TimeSlotProps) {
         <TaskForm
           task={editingTask}
           day={day}
+          date={date}
           timeSlot={timeSlot}
           onClose={handleFormClose}
         />

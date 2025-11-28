@@ -7,15 +7,16 @@ import { EventForm } from './EventForm';
 
 interface EventsSectionProps {
   day: DayOfWeek;
+  date: Date;
 }
 
-export function EventsSection({ day }: EventsSectionProps) {
+export function EventsSection({ day, date }: EventsSectionProps) {
   const { getEventsForDay } = usePlanner();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const events = getEventsForDay(day);
+  const events = getEventsForDay(day, date);
 
   const handleAddClick = () => {
     setEditingEvent(null);
@@ -96,6 +97,7 @@ export function EventsSection({ day }: EventsSectionProps) {
         <EventForm
           event={editingEvent}
           day={day}
+          date={date}
           onClose={handleFormClose}
         />
       )}

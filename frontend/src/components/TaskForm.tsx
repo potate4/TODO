@@ -8,11 +8,12 @@ import { ColorPicker } from './ColorPicker';
 interface TaskFormProps {
   task?: Task | null;
   day: DayOfWeek;
+  date: Date;
   timeSlot: string;
   onClose: () => void;
 }
 
-export function TaskForm({ task, day, timeSlot, onClose }: TaskFormProps) {
+export function TaskForm({ task, day, date, timeSlot, onClose }: TaskFormProps) {
   const { addTask, updateTask, createTask } = usePlanner();
   const [title, setTitle] = useState(task?.title || '');
   const [description, setDescription] = useState(task?.description || '');
@@ -48,6 +49,7 @@ export function TaskForm({ task, day, timeSlot, onClose }: TaskFormProps) {
       const newTask = createTask(
         title.trim(),
         day,
+        date,
         timeSlot,
         color,
         description.trim() || undefined,

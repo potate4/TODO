@@ -36,19 +36,21 @@ export function WeekView() {
     const task = tasks.find(t => t.id === active.id);
     if (!task) return;
 
-    // Extract day and timeSlot from the droppable ID
-    // Format: "drop-{day}-{timeSlot}" where timeSlot is like "06:00"
+    // Extract day, date, and timeSlot from the droppable ID
+    // Format: "drop-{day}|{timestamp}|{timeSlot}"
     const dropId = over.id as string;
     if (typeof dropId === 'string' && dropId.startsWith('drop-')) {
       // Remove "drop-" prefix
       const rest = dropId.substring(5);
-      // Find the first occurrence of "-" to separate day from timeSlot
-      const firstDashIndex = rest.indexOf('-');
-      if (firstDashIndex > 0) {
-        const day = rest.substring(0, firstDashIndex);
-        const timeSlot = rest.substring(firstDashIndex + 1);
-        if (day && timeSlot) {
-          moveTask(task.id, day as any, timeSlot);
+      // Split by "|" separator
+      const parts = rest.split('|');
+      if (parts.length === 3) {
+        const day = parts[0];
+        const timestamp = parseInt(parts[1], 10);
+        const timeSlot = parts[2];
+        if (day && timeSlot && !isNaN(timestamp)) {
+          const newDate = new Date(timestamp);
+          moveTask(task.id, day as any, newDate, timeSlot);
         }
       }
     }

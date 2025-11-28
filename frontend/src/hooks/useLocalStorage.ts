@@ -51,13 +51,14 @@ export function useLocalStorage() {
     );
   }, []);
 
-  const moveTask = useCallback((taskId: string, newDay: string, newTimeSlot: string) => {
+  const moveTask = useCallback((taskId: string, newDay: string, newDate: string, newTimeSlot: string) => {
     setTasks(prev =>
       prev.map(task =>
         task.id === taskId
           ? {
               ...task,
               day: newDay as Task['day'],
+              date: newDate,
               timeSlot: newTimeSlot,
               updatedAt: new Date(),
             }

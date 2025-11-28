@@ -54,7 +54,7 @@ export function DayColumn({ day }: DayColumnProps) {
       </div>
 
       {/* Events Section */}
-      <EventsSection day={day} />
+      <EventsSection day={day} date={date} />
 
       {/* Time Slots */}
       <div>
@@ -62,6 +62,7 @@ export function DayColumn({ day }: DayColumnProps) {
           <TimeSlot
             key={slot.time}
             day={day}
+            date={date}
             timeSlot={slot.time}
             label={slot.label}
           />

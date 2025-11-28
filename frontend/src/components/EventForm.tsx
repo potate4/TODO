@@ -8,10 +8,11 @@ import { ColorPicker } from './ColorPicker';
 interface EventFormProps {
   event?: Event | null;
   day: DayOfWeek;
+  date: Date;
   onClose: () => void;
 }
 
-export function EventForm({ event, day, onClose }: EventFormProps) {
+export function EventForm({ event, day, date, onClose }: EventFormProps) {
   const { addEvent, updateEvent, createEvent } = usePlanner();
   const [title, setTitle] = useState(event?.title || '');
   const [description, setDescription] = useState(event?.description || '');
@@ -53,6 +54,7 @@ export function EventForm({ event, day, onClose }: EventFormProps) {
       const newEvent = createEvent(
         title.trim(),
         day,
+        date,
         color,
         description.trim() || undefined,
         isAllDay,
