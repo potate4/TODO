@@ -1,12 +1,18 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Calendar, CalendarDays } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar, CalendarDays, Trash2 } from 'lucide-react';
 import { usePlanner } from '../context/PlannerContext';
 import { formatDateShort } from '../utils/dateUtils';
 import { DatePicker } from './DatePicker';
 
 export function Header() {
-  const { selectedDates, displayDates, setSelectedDates, goToToday, shiftDates, hasMoreDays, hasPreviousDays } = usePlanner();
+  const { selectedDates, displayDates, setSelectedDates, goToToday, shiftDates, hasMoreDays, hasPreviousDays, deleteAllTasks } = usePlanner();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+  const handleClearAll = () => {
+    if (confirm('Are you sure you want to delete ALL tasks? This action cannot be undone.')) {
+      deleteAllTasks();
+    }
+  };
 
   const formatDateRange = () => {
     if (displayDates.length === 0) return 'No dates selected';
@@ -42,6 +48,18 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              onClick={handleClearAll}
+              className="px-5 py-2.5 rounded-xl border border-red-200 dark:border-red-800
+                       bg-white dark:bg-gray-800 text-red-600 dark:text-red-400
+                       hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-300 dark:hover:border-red-700
+                       transition-all duration-200 shadow-sm hover:shadow-md
+                       flex items-center gap-2 font-medium text-sm"
+            >
+              <Trash2 size={16} />
+              <span>Clear All</span>
+            </button>
+
             <button
               onClick={() => setIsDatePickerOpen(true)}
               className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700

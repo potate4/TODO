@@ -49,18 +49,18 @@ export function TimeSlot({ day, date, timeSlot, label }: TimeSlotProps) {
         ref={setNodeRef}
         onClick={visibleTasks.length === 0 ? handleAddClick : undefined}
         className={`
-          border-b border-gray-100 dark:border-gray-800/50 min-h-[52px] px-3 py-2.5
-          transition-all duration-150 group
+          border-b border-gray-100 dark:border-gray-800/50 h-[60px] px-3 py-2.5
+          transition-all duration-150 group overflow-hidden
           ${isOver ? 'bg-blue-50/80 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700/50' : 'hover:bg-gray-50/60 dark:hover:bg-gray-800/30'}
           ${visibleTasks.length === 0 ? 'cursor-pointer' : ''}
         `}
       >
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3 h-full">
           <div className="flex-shrink-0 w-16 text-xs text-gray-400 dark:text-gray-500 font-semibold tracking-wide pt-0.5">
             {label}
           </div>
           
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 h-full overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {visibleTasks.length > 0 ? (
               <div className="space-y-1">
                 {visibleTasks.map((task) => (
@@ -79,7 +79,7 @@ export function TimeSlot({ day, date, timeSlot, label }: TimeSlotProps) {
             ) : (
               <div
                 className="
-                  w-full opacity-0 group-hover:opacity-100
+                  w-full h-full opacity-0 group-hover:opacity-100
                   flex items-center justify-center gap-1.5
                   px-3 py-2 rounded-lg text-xs font-medium text-gray-400 dark:text-gray-500
                   transition-all duration-200 pointer-events-none

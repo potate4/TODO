@@ -41,6 +41,10 @@ export function useLocalStorage() {
     setTasks(prev => prev.filter(task => task.id !== id));
   }, []);
 
+  const deleteAllTasks = useCallback(() => {
+    setTasks([]);
+  }, []);
+
   const toggleTaskComplete = useCallback((id: string) => {
     setTasks(prev =>
       prev.map(task =>
@@ -73,6 +77,7 @@ export function useLocalStorage() {
     addTask,
     updateTask,
     deleteTask,
+    deleteAllTasks,
     toggleTaskComplete,
     moveTask,
   };
