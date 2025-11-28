@@ -49,7 +49,7 @@ export function TimeSlot({ day, date, timeSlot, label }: TimeSlotProps) {
         ref={setNodeRef}
         onClick={visibleTasks.length === 0 ? handleAddClick : undefined}
         className={`
-          border-b border-gray-100 dark:border-gray-800/50 h-[60px] px-3 py-2.5
+          border-b border-gray-100 dark:border-gray-800/50 h-[72px] px-3 py-2.5
           transition-all duration-150 group overflow-hidden
           ${isOver ? 'bg-blue-50/80 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700/50' : 'hover:bg-gray-50/60 dark:hover:bg-gray-800/30'}
           ${visibleTasks.length === 0 ? 'cursor-pointer' : ''}
