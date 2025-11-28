@@ -46,6 +46,8 @@ function PredefinedTaskItem({ task, onEdit, onDelete }: PredefinedTaskItemProps)
   return (
     <div
       ref={setNodeRef}
+      {...listeners}
+      {...attributes}
       style={combinedStyle}
       className={`
         group relative flex items-center gap-2 p-2.5 rounded-lg mb-1.5
@@ -54,13 +56,14 @@ function PredefinedTaskItem({ task, onEdit, onDelete }: PredefinedTaskItemProps)
         ${isDragging ? 'opacity-50 z-50 scale-95' : ''}
         border-gray-200 dark:border-gray-700 shadow-sm
       `}
-      onClick={() => onEdit(task)}
+      onClick={(e) => {
+        // Only edit if not dragging
+        if (!isDragging) {
+          onEdit(task);
+        }
+      }}
     >
-      <div
-        {...listeners}
-        {...attributes}
-        className="flex-shrink-0 cursor-grab active:cursor-grabbing text-gray-300 dark:text-gray-600 hover:text-gray-400 dark:hover:text-gray-500 transition-colors"
-      >
+      <div className="flex-shrink-0 text-gray-300 dark:text-gray-600">
         <GripVertical size={12} />
       </div>
       <div className="flex-1 min-w-0">

@@ -59,10 +59,12 @@ export function TaskBlock({ task, onEdit }: TaskBlockProps) {
   return (
     <div
       ref={setNodeRef}
+      {...listeners}
+      {...attributes}
       style={combinedStyle}
       className={`
         group relative flex items-center gap-2.5 p-2.5 rounded-lg mb-1.5
-        border-l-[3px] cursor-pointer transition-all duration-200
+        border-l-[3px] cursor-grab active:cursor-grabbing transition-all duration-200
         hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20
         hover:-translate-y-0.5
         ${isDragging ? 'opacity-50 z-50 scale-95' : ''}
@@ -71,13 +73,14 @@ export function TaskBlock({ task, onEdit }: TaskBlockProps) {
           : 'border-gray-200 dark:border-gray-700 shadow-sm'
         }
       `}
-      onClick={handleClick}
+      onClick={(e) => {
+        // Only edit if not dragging
+        if (!isDragging && onEdit) {
+          handleClick();
+        }
+      }}
     >
-      <div
-        {...listeners}
-        {...attributes}
-        className="flex-shrink-0 cursor-grab active:cursor-grabbing text-gray-300 dark:text-gray-600 hover:text-gray-400 dark:hover:text-gray-500 transition-colors"
-      >
+      <div className="flex-shrink-0 text-gray-300 dark:text-gray-600">
         <GripVertical size={12} />
       </div>
       <button
