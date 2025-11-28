@@ -41,20 +41,12 @@ export function DayColumn({ day }: DayColumnProps) {
         <div
           className={`
             text-xs mt-1
-            ${isTodayDate ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}
+            ${isTodayDate ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-500 dark:text-gray-400'}
           `}
         >
-          {dateStr}
+          {isTodayDate ? 'Today' : dateStr}
         </div>
-        {isTodayDate && (
-          <div className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-1">
-            Today
-          </div>
-        )}
       </div>
-
-      {/* Events Section */}
-      <EventsSection day={day} date={date} />
 
       {/* Time Slots */}
       <div>
@@ -68,6 +60,9 @@ export function DayColumn({ day }: DayColumnProps) {
           />
         ))}
       </div>
+
+      {/* Events Section */}
+      <EventsSection day={day} date={date} />
     </div>
   );
 }
