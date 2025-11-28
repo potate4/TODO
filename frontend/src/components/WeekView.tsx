@@ -1,14 +1,13 @@
 import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { useState } from 'react';
-import { DAYS_OF_WEEK } from '../types/planner';
 import type { Task } from '../types/planner';
 import { usePlanner } from '../context/PlannerContext';
 import { DayColumn } from './DayColumn';
 import { TaskBlock } from './TaskBlock';
 
 export function WeekView() {
-  const { tasks, moveTask } = usePlanner();
+  const { tasks, moveTask, selectedDates } = usePlanner();
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   const sensors = useSensors(
@@ -63,9 +62,9 @@ export function WeekView() {
       onDragEnd={handleDragEnd}
     >
       <div className="flex overflow-x-auto px-4">
-        {DAYS_OF_WEEK.map((day) => (
-          <div key={day} className="flex-shrink-0 w-[280px]">
-            <DayColumn day={day} />
+        {selectedDates.map((date) => (
+          <div key={date.getTime()} className="flex-shrink-0 w-[280px]">
+            <DayColumn date={date} />
           </div>
         ))}
       </div>

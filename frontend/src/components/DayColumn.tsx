@@ -1,20 +1,20 @@
 import type { DayOfWeek } from '../types/planner';
 import { DAY_LABELS } from '../types/planner';
 import { generateTimeSlots } from '../utils/dateUtils';
-import { getDateForDay, isToday, formatDateShort } from '../utils/dateUtils';
-import { usePlanner } from '../context/PlannerContext';
+import { isToday, formatDateShort } from '../utils/dateUtils';
 import { TimeSlot } from './TimeSlot';
 import { EventsSection } from './EventsSection';
 
 interface DayColumnProps {
-  day: DayOfWeek;
+  date: Date;
 }
 
-export function DayColumn({ day }: DayColumnProps) {
-  const { currentWeekStart } = usePlanner();
+export function DayColumn({ date }: DayColumnProps) {
   const timeSlots = generateTimeSlots();
-  const date = getDateForDay(currentWeekStart, day);
   const isTodayDate = isToday(date);
+  const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
+  const dayMap: DayOfWeek[] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  const day = dayMap[dayOfWeek];
   const dayLabel = DAY_LABELS[day];
   const dateStr = formatDateShort(date);
 

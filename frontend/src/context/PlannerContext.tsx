@@ -4,11 +4,12 @@ import { useLocalStorage, useEventsStorage } from '../hooks/useLocalStorage';
 import { getWeekStart, getPreviousWeek, getNextWeek, getDateForDay, formatDateISO } from '../utils/dateUtils';
 
 interface PlannerContextType {
-  // Week navigation
-  currentWeekStart: Date;
-  goToPreviousWeek: () => void;
-  goToNextWeek: () => void;
+  // Date selection
+  selectedDates: Date[];
+  setSelectedDates: (dates: Date[]) => void;
+  goToWeek: (weekStart: Date) => void;
   goToToday: () => void;
+  shiftDates: (days: number) => void;
   
   // Tasks
   tasks: Task[];
@@ -53,7 +54,20 @@ interface PlannerContextType {
 const PlannerContext = createContext<PlannerContextType | undefined>(undefined);
 
 export function PlannerProvider({ children }: { children: ReactNode }) {
-  const [currentWeekStart, setCurrentWeekStart] = useState<Date>(getWeekStart());
+  // Initialize with current week (7 days)
+  const initializeDates = useCallback(() => {
+    const weekStart = getWeekStart();
+    const dates: Date[] = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(weekStart);
+      date.setDate(date.getDate() + i);
+      dates.push(date);
+    }
+    return dates;
+  }, []);
+
+  const [selectedDates, setSelectedDates] = useState<Date[]>(initializeDates);
+  
   const {
     tasks,
     isLoading,
@@ -70,16 +84,29 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     deleteEvent,
   } = useEventsStorage();
 
-  const goToPreviousWeek = useCallback(() => {
-    setCurrentWeekStart(prev => getPreviousWeek(prev));
-  }, []);
-
-  const goToNextWeek = useCallback(() => {
-    setCurrentWeekStart(prev => getNextWeek(prev));
+  const goToWeek = useCallback((weekStart: Date) => {
+    const dates: Date[] = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(weekStart);
+      date.setDate(date.getDate() + i);
+      dates.push(date);
+    }
+    setSelectedDates(dates);
   }, []);
 
   const goToToday = useCallback(() => {
-    setCurrentWeekStart(getWeekStart());
+    const weekStart = getWeekStart();
+    goToWeek(weekStart);
+  }, [goToWeek]);
+
+  const shiftDates = useCallback((days: number) => {
+    setSelectedDates(prev => 
+      prev.map(date => {
+        const newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + days);
+        return newDate;
+      })
+    );
   }, []);
 
   const getTasksForDay = useCallback(
@@ -173,10 +200,11 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
   );
 
   const value: PlannerContextType = {
-    currentWeekStart,
-    goToPreviousWeek,
-    goToNextWeek,
+    selectedDates,
+    setSelectedDates,
+    goToWeek,
     goToToday,
+    shiftDates,
     tasks,
     isLoading,
     addTask,
