@@ -4,6 +4,7 @@ import { generateTimeSlots } from '../utils/dateUtils';
 import { getDateForDay, isToday, formatDateShort } from '../utils/dateUtils';
 import { usePlanner } from '../context/PlannerContext';
 import { TimeSlot } from './TimeSlot';
+import { EventsSection } from './EventsSection';
 
 interface DayColumnProps {
   day: DayOfWeek;
@@ -51,6 +52,9 @@ export function DayColumn({ day }: DayColumnProps) {
           </div>
         )}
       </div>
+
+      {/* Events Section */}
+      <EventsSection day={day} />
 
       {/* Time Slots */}
       <div>

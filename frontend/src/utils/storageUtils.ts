@@ -1,6 +1,7 @@
-import type { Task, WeekData } from '../types/planner';
+import type { Task, WeekData, Event } from '../types/planner';
 
 const STORAGE_KEY = 'weekly-planner-data';
+const EVENTS_STORAGE_KEY = 'weekly-planner-events';
 
 /**
  * Save tasks to localStorage
@@ -60,6 +61,44 @@ export function getStorageSize(): number {
     return data ? new Blob([data]).size : 0;
   } catch {
     return 0;
+  }
+}
+
+/**
+ * Save events to localStorage
+ */
+export function saveEventsToStorage(events: Event[]): void {
+  try {
+    const serialized = JSON.stringify(events.map(event => ({
+      ...event,
+      createdAt: event.createdAt.toISOString(),
+      updatedAt: event.updatedAt.toISOString(),
+    })));
+    localStorage.setItem(EVENTS_STORAGE_KEY, serialized);
+  } catch (error) {
+    console.error('Failed to save events to localStorage:', error);
+  }
+}
+
+/**
+ * Load events from localStorage
+ */
+export function loadEventsFromStorage(): Event[] {
+  try {
+    const serialized = localStorage.getItem(EVENTS_STORAGE_KEY);
+    if (!serialized) {
+      return [];
+    }
+    
+    const data = JSON.parse(serialized);
+    return data.map((event: any) => ({
+      ...event,
+      createdAt: new Date(event.createdAt),
+      updatedAt: new Date(event.updatedAt),
+    })) as Event[];
+  } catch (error) {
+    console.error('Failed to load events from localStorage:', error);
+    return [];
   }
 }
 

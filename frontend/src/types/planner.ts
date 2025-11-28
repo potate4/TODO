@@ -11,6 +11,19 @@ export interface Task {
   updatedAt: Date;
 }
 
+export interface Event {
+  id: string;
+  title: string;
+  description?: string;
+  day: DayOfWeek;
+  isAllDay: boolean;
+  startTime?: string;  // Format: '06:00' - only if not all day
+  endTime?: string;    // Format: '18:00' - only if not all day
+  color: string;       // hex color code
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export type DayOfWeek = 'sat' | 'sun' | 'mon' | 'tue' | 'wed' | 'thu' | 'fri';
 
 export interface WeekData {

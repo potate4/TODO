@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import type { Task, DayOfWeek } from '../types/planner';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import type { Task, DayOfWeek, Event } from '../types/planner';
+import { useLocalStorage, useEventsStorage } from '../hooks/useLocalStorage';
 import { getWeekStart, getPreviousWeek, getNextWeek, getDateForDay } from '../utils/dateUtils';
 
 interface PlannerContextType {
@@ -32,6 +32,22 @@ interface PlannerContextType {
     description?: string,
     category?: string
   ) => Task;
+  
+  // Events
+  events: Event[];
+  addEvent: (event: Event) => void;
+  updateEvent: (id: string, updates: Partial<Event>) => void;
+  deleteEvent: (id: string) => void;
+  getEventsForDay: (day: DayOfWeek) => Event[];
+  createEvent: (
+    title: string,
+    day: DayOfWeek,
+    color?: string,
+    description?: string,
+    isAllDay?: boolean,
+    startTime?: string,
+    endTime?: string
+  ) => Event;
 }
 
 const PlannerContext = createContext<PlannerContextType | undefined>(undefined);
@@ -47,6 +63,12 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     toggleTaskComplete,
     moveTask: moveTaskStorage,
   } = useLocalStorage();
+  const {
+    events,
+    addEvent,
+    updateEvent,
+    deleteEvent,
+  } = useEventsStorage();
 
   const goToPreviousWeek = useCallback(() => {
     setCurrentWeekStart(prev => getPreviousWeek(prev));
@@ -109,6 +131,40 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     [moveTaskStorage]
   );
 
+  const getEventsForDay = useCallback(
+    (day: DayOfWeek): Event[] => {
+      return events.filter(event => event.day === day);
+    },
+    [events]
+  );
+
+  const createEvent = useCallback(
+    (
+      title: string,
+      day: DayOfWeek,
+      color: string = '#3b82f6',
+      description?: string,
+      isAllDay: boolean = true,
+      startTime?: string,
+      endTime?: string
+    ): Event => {
+      const now = new Date();
+      return {
+        id: `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        title,
+        description,
+        day,
+        isAllDay,
+        startTime,
+        endTime,
+        color,
+        createdAt: now,
+        updatedAt: now,
+      };
+    },
+    []
+  );
+
   const value: PlannerContextType = {
     currentWeekStart,
     goToPreviousWeek,
@@ -124,6 +180,12 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     getTasksForDay,
     getTasksForTimeSlot,
     createTask,
+    events,
+    addEvent,
+    updateEvent,
+    deleteEvent,
+    getEventsForDay,
+    createEvent,
   };
 
   return (
