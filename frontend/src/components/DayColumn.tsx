@@ -48,9 +48,6 @@ export function DayColumn({ date }: DayColumnProps) {
         </div>
       </div>
 
-      {/* Events Section */}
-      <EventsSection day={day} date={date} />
-
       {/* Time Slots */}
       <div>
         {timeSlots.map((slot) => (
@@ -63,6 +60,9 @@ export function DayColumn({ date }: DayColumnProps) {
           />
         ))}
       </div>
+
+      {/* Events Section */}
+      <EventsSection day={day} date={date} />
     </div>
   );
 }
