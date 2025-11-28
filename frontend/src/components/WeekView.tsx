@@ -7,7 +7,7 @@ import { DayColumn } from './DayColumn';
 import { TaskBlock } from './TaskBlock';
 
 export function WeekView() {
-  const { tasks, moveTask, selectedDates } = usePlanner();
+  const { tasks, moveTask, displayDates } = usePlanner();
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   const sensors = useSensors(
@@ -63,7 +63,7 @@ export function WeekView() {
     >
       <div className="w-full mx-auto px-24">
         <div className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
-          {selectedDates.map((date) => (
+          {displayDates.map((date) => (
             <div key={date.getTime()} className="flex-shrink-0 w-[300px] mr-2">
               <DayColumn date={date} />
             </div>

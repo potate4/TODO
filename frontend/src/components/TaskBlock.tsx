@@ -26,9 +26,18 @@ export function TaskBlock({ task, onEdit }: TaskBlockProps) {
       }
     : {};
   
+  // Convert hex to rgba with opacity
+  const hexToRgba = (hex: string, opacity: number) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
+  
   const combinedStyle = {
     ...dragStyle,
     borderLeftColor: task.color,
+    backgroundColor: hexToRgba(task.color, 0.1),
   };
 
   const handleToggleComplete = (e: React.MouseEvent) => {
@@ -58,8 +67,8 @@ export function TaskBlock({ task, onEdit }: TaskBlockProps) {
         hover:-translate-y-0.5
         ${isDragging ? 'opacity-50 z-50 scale-95' : ''}
         ${task.completed 
-          ? 'opacity-70 bg-gray-50/80 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700' 
-          : 'bg-white dark:bg-gray-800/80 border-gray-200 dark:border-gray-700 shadow-sm'
+          ? 'opacity-70 border-gray-200 dark:border-gray-700' 
+          : 'border-gray-200 dark:border-gray-700 shadow-sm'
         }
       `}
       onClick={handleClick}

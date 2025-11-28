@@ -6,10 +6,13 @@ import { getWeekStart, getPreviousWeek, getNextWeek, getDateForDay, formatDateIS
 interface PlannerContextType {
   // Date selection
   selectedDates: Date[];
+  displayDates: Date[];
   setSelectedDates: (dates: Date[]) => void;
   goToWeek: (weekStart: Date) => void;
   goToToday: () => void;
   shiftDates: (days: number) => void;
+  hasMoreDays: boolean;
+  hasPreviousDays: boolean;
   
   // Tasks
   tasks: Task[];
@@ -43,6 +46,7 @@ interface PlannerContextType {
   createEvent: (
     title: string,
     day: DayOfWeek,
+    date: Date,
     color?: string,
     description?: string,
     isAllDay?: boolean,
@@ -54,7 +58,7 @@ interface PlannerContextType {
 const PlannerContext = createContext<PlannerContextType | undefined>(undefined);
 
 export function PlannerProvider({ children }: { children: ReactNode }) {
-  // Initialize with current week (7 days)
+  // Initialize with current week (7 days, but we'll show 5 at a time)
   const initializeDates = useCallback(() => {
     const weekStart = getWeekStart();
     const dates: Date[] = [];
@@ -67,6 +71,7 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const [selectedDates, setSelectedDates] = useState<Date[]>(initializeDates);
+  const [currentOffset, setCurrentOffset] = useState(0);
   
   const {
     tasks,
@@ -92,22 +97,29 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
       dates.push(date);
     }
     setSelectedDates(dates);
+    setCurrentOffset(0);
   }, []);
 
   const goToToday = useCallback(() => {
     const weekStart = getWeekStart();
     goToWeek(weekStart);
+    setCurrentOffset(0);
   }, [goToWeek]);
 
   const shiftDates = useCallback((days: number) => {
-    setSelectedDates(prev => 
-      prev.map(date => {
-        const newDate = new Date(date);
-        newDate.setDate(newDate.getDate() + days);
-        return newDate;
-      })
-    );
+    setCurrentOffset(prev => {
+      const newOffset = prev + days;
+      // Limit offset to show all 7 days (0-2 for 5-day view)
+      if (newOffset < 0) return 0;
+      if (newOffset > 2) return 2; // Max offset to show last 5 days
+      return newOffset;
+    });
   }, []);
+
+  // Get the 5 days to display based on current offset
+  const getDisplayDates = useCallback(() => {
+    return selectedDates.slice(currentOffset, currentOffset + 5);
+  }, [selectedDates, currentOffset]);
 
   const getTasksForDay = useCallback(
     (day: DayOfWeek, date: Date): Task[] => {
@@ -199,12 +211,19 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  const displayDates = getDisplayDates();
+  const hasMoreDays = currentOffset < selectedDates.length - 5;
+  const hasPreviousDays = currentOffset > 0;
+
   const value: PlannerContextType = {
     selectedDates,
+    displayDates,
     setSelectedDates,
     goToWeek,
     goToToday,
     shiftDates,
+    hasMoreDays,
+    hasPreviousDays,
     tasks,
     isLoading,
     addTask,

@@ -5,21 +5,21 @@ import { formatDateShort } from '../utils/dateUtils';
 import { DatePicker } from './DatePicker';
 
 export function Header() {
-  const { selectedDates, setSelectedDates, goToToday, shiftDates } = usePlanner();
+  const { selectedDates, displayDates, setSelectedDates, goToToday, shiftDates, hasMoreDays, hasPreviousDays } = usePlanner();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const formatDateRange = () => {
-    if (selectedDates.length === 0) return 'No dates selected';
-    const first = formatDateShort(selectedDates[0]);
-    const last = formatDateShort(selectedDates[selectedDates.length - 1]);
+    if (displayDates.length === 0) return 'No dates selected';
+    const first = formatDateShort(displayDates[0]);
+    const last = formatDateShort(displayDates[displayDates.length - 1]);
     return `${first} - ${last}`;
   };
 
-  const handlePreviousDay = () => {
+  const handlePrevious = () => {
     shiftDates(-1);
   };
 
-  const handleNextDay = () => {
+  const handleNext = () => {
     shiftDates(1);
   };
 
@@ -56,11 +56,12 @@ export function Header() {
 
             <div className="flex items-center gap-1 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-1 shadow-sm">
               <button
-                onClick={handlePreviousDay}
+                onClick={handlePrevious}
+                disabled={!hasPreviousDays}
                 className="p-2 rounded-lg text-gray-600 dark:text-gray-400
                          hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white
-                         transition-all duration-200"
-                aria-label="Previous day"
+                         transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Previous"
               >
                 <ChevronLeft size={20} />
               </button>
@@ -76,11 +77,12 @@ export function Header() {
               </button>
 
               <button
-                onClick={handleNextDay}
+                onClick={handleNext}
+                disabled={!hasMoreDays}
                 className="p-2 rounded-lg text-gray-600 dark:text-gray-400
                          hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white
-                         transition-all duration-200"
-                aria-label="Next day"
+                         transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Next"
               >
                 <ChevronRight size={20} />
               </button>
