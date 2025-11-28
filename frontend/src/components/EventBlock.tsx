@@ -45,6 +45,14 @@ export function EventBlock({ event, onEdit }: EventBlockProps) {
     return '';
   };
 
+  // Convert hex to rgba with opacity
+  const hexToRgba = (hex: string, opacity: number) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
+
   return (
     <div
       onClick={handleClick}
@@ -53,9 +61,12 @@ export function EventBlock({ event, onEdit }: EventBlockProps) {
         border-l-[3px] cursor-pointer transition-all duration-200
         hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20
         hover:-translate-y-0.5
-        bg-white dark:bg-gray-800/80 border-gray-200 dark:border-gray-700 shadow-sm
+        border-gray-200 dark:border-gray-700 shadow-sm
       "
-      style={{ borderLeftColor: event.color }}
+      style={{ 
+        borderLeftColor: event.color,
+        backgroundColor: hexToRgba(event.color, 0.1),
+      }}
     >
       <div className="flex-1 min-w-0">
         <div className="text-sm font-bold text-gray-900 dark:text-gray-100 truncate leading-tight">
