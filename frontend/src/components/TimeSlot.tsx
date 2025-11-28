@@ -49,14 +49,14 @@ export function TimeSlot({ day, date, timeSlot, label }: TimeSlotProps) {
         ref={setNodeRef}
         onClick={visibleTasks.length === 0 ? handleAddClick : undefined}
         className={`
-          border-b border-gray-200 dark:border-gray-700 min-h-[50px] p-1.5
-          transition-colors group
-          ${isOver ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}
+          border-b border-gray-100 dark:border-gray-800/50 min-h-[52px] px-3 py-2.5
+          transition-all duration-150 group
+          ${isOver ? 'bg-blue-50/80 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700/50' : 'hover:bg-gray-50/60 dark:hover:bg-gray-800/30'}
           ${visibleTasks.length === 0 ? 'cursor-pointer' : ''}
         `}
       >
-        <div className="flex items-start gap-2">
-          <div className="flex-shrink-0 w-14 text-xs text-gray-500 dark:text-gray-400 font-medium">
+        <div className="flex items-start gap-3">
+          <div className="flex-shrink-0 w-16 text-xs text-gray-400 dark:text-gray-500 font-semibold tracking-wide pt-0.5">
             {label}
           </div>
           
@@ -71,7 +71,7 @@ export function TimeSlot({ day, date, timeSlot, label }: TimeSlotProps) {
                   />
                 ))}
                 {overflowCount > 0 && (
-                  <div className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
+                  <div className="text-xs font-medium text-gray-400 dark:text-gray-500 px-2.5 py-1.5 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                     +{overflowCount} more task{overflowCount !== 1 ? 's' : ''}
                   </div>
                 )}
@@ -80,9 +80,10 @@ export function TimeSlot({ day, date, timeSlot, label }: TimeSlotProps) {
               <div
                 className="
                   w-full opacity-0 group-hover:opacity-100
-                  flex items-center justify-center gap-1
-                  px-2 py-1 rounded text-xs text-gray-400 dark:text-gray-500
-                  transition-all pointer-events-none
+                  flex items-center justify-center gap-1.5
+                  px-3 py-2 rounded-lg text-xs font-medium text-gray-400 dark:text-gray-500
+                  transition-all duration-200 pointer-events-none
+                  bg-gray-50/50 dark:bg-gray-800/30
                 "
               >
                 <Plus size={14} />

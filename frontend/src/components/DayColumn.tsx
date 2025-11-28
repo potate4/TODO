@@ -19,20 +19,20 @@ export function DayColumn({ date }: DayColumnProps) {
   const dateStr = formatDateShort(date);
 
   return (
-    <div className="flex flex-col border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 h-full">
+    <div className="flex flex-col border-r border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 min-h-[calc(100vh-180px)] shadow-sm">
       {/* Day Header */}
       <div
         className={`
-          sticky top-0 z-10 p-3 border-b-2 text-center
+          sticky top-0 z-10 px-4 py-4 border-b text-center backdrop-blur-sm
           ${isTodayDate
-            ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500'
-            : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+            ? 'bg-gradient-to-b from-blue-50 to-blue-100/50 dark:from-blue-900/40 dark:to-blue-800/20 border-blue-200 dark:border-blue-700/50 shadow-sm'
+            : 'bg-gradient-to-b from-gray-50/80 to-white dark:from-gray-800/80 dark:to-gray-900 border-gray-100 dark:border-gray-800'
           }
         `}
       >
         <div
           className={`
-            text-sm font-semibold uppercase
+            text-sm font-bold uppercase tracking-wider
             ${isTodayDate ? 'text-blue-700 dark:text-blue-300' : 'text-gray-700 dark:text-gray-300'}
           `}
         >
@@ -40,8 +40,8 @@ export function DayColumn({ date }: DayColumnProps) {
         </div>
         <div
           className={`
-            text-xs mt-1
-            ${isTodayDate ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-500 dark:text-gray-400'}
+            text-xs mt-1.5 font-medium
+            ${isTodayDate ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}
           `}
         >
           {isTodayDate ? 'Today' : dateStr}

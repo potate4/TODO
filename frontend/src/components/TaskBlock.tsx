@@ -52,41 +52,45 @@ export function TaskBlock({ task, onEdit }: TaskBlockProps) {
       ref={setNodeRef}
       style={combinedStyle}
       className={`
-        group relative flex items-center gap-1.5 p-1.5 rounded-md mb-0.5
-        border-l-4 cursor-pointer transition-all
-        hover:shadow-md hover:scale-[1.01]
-        ${isDragging ? 'opacity-50 z-50' : ''}
-        ${task.completed ? 'opacity-60 bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-gray-800'}
+        group relative flex items-center gap-2.5 p-2.5 rounded-lg mb-1.5
+        border-l-[3px] cursor-pointer transition-all duration-200
+        hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20
+        hover:-translate-y-0.5
+        ${isDragging ? 'opacity-50 z-50 scale-95' : ''}
+        ${task.completed 
+          ? 'opacity-70 bg-gray-50/80 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700' 
+          : 'bg-white dark:bg-gray-800/80 border-gray-200 dark:border-gray-700 shadow-sm'
+        }
       `}
       onClick={handleClick}
     >
       <div
         {...listeners}
         {...attributes}
-        className="flex-shrink-0 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+        className="flex-shrink-0 cursor-grab active:cursor-grabbing text-gray-300 dark:text-gray-600 hover:text-gray-400 dark:hover:text-gray-500 transition-colors"
       >
-        <GripVertical size={14} />
+        <GripVertical size={12} />
       </div>
       <button
         onClick={handleToggleComplete}
         className={`
-          flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center
-          transition-colors
+          flex-shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center
+          transition-all duration-200
           ${task.completed
-            ? 'bg-green-500 border-green-500 text-white'
-            : 'border-gray-300 dark:border-gray-600 hover:border-green-500'
+            ? 'bg-gradient-to-br from-green-400 to-green-500 border-green-500 text-white shadow-sm'
+            : 'border-gray-300 dark:border-gray-600 hover:border-green-400 hover:bg-green-50 dark:hover:bg-green-900/20'
           }
         `}
         aria-label={task.completed ? 'Mark as incomplete' : 'Mark as complete'}
       >
-        {task.completed && <Check size={12} />}
+        {task.completed && <Check size={11} strokeWidth={3} />}
       </button>
       
       <div className="flex-1 min-w-0">
         <div
           className={`
-            text-sm font-medium truncate
-            ${task.completed ? 'line-through text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'}
+            text-sm font-semibold truncate leading-tight
+            ${task.completed ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-800 dark:text-gray-100'}
           `}
         >
           {task.title}
@@ -94,15 +98,15 @@ export function TaskBlock({ task, onEdit }: TaskBlockProps) {
         {task.description && (
           <div
             className={`
-              text-xs truncate mt-0.5
-              ${task.completed ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-600 dark:text-gray-400'}
+              text-xs truncate mt-1 leading-relaxed
+              ${task.completed ? 'line-through text-gray-300 dark:text-gray-600' : 'text-gray-500 dark:text-gray-400'}
             `}
           >
             {task.description}
           </div>
         )}
         {task.category && (
-          <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 inline-block">
+          <span className="text-[10px] font-medium text-gray-400 dark:text-gray-500 mt-1.5 inline-block px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700/50 rounded">
             {task.category}
           </span>
         )}
@@ -112,12 +116,12 @@ export function TaskBlock({ task, onEdit }: TaskBlockProps) {
         onClick={handleDelete}
         className="
           flex-shrink-0 opacity-0 group-hover:opacity-100
-          p-1 rounded hover:bg-red-100 dark:hover:bg-red-900
-          transition-opacity
+          p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30
+          transition-all duration-200
         "
         aria-label="Delete task"
       >
-        <X size={14} className="text-red-500" />
+        <X size={14} className="text-red-500 dark:text-red-400" />
       </button>
     </div>
   );

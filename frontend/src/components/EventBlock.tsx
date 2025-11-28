@@ -49,23 +49,24 @@ export function EventBlock({ event, onEdit }: EventBlockProps) {
     <div
       onClick={handleClick}
       className="
-        group relative flex items-center gap-2 p-2 rounded-md mb-1.5
-        border-l-4 cursor-pointer transition-all
-        hover:shadow-md hover:scale-[1.01]
-        bg-white dark:bg-gray-800
+        group relative flex items-center gap-3 p-3 rounded-xl mb-2
+        border-l-[3px] cursor-pointer transition-all duration-200
+        hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20
+        hover:-translate-y-0.5
+        bg-white dark:bg-gray-800/80 border-gray-200 dark:border-gray-700 shadow-sm
       "
       style={{ borderLeftColor: event.color }}
     >
       <div className="flex-1 min-w-0">
-        <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+        <div className="text-sm font-bold text-gray-900 dark:text-gray-100 truncate leading-tight">
           {event.title}
         </div>
         {event.description && (
-          <div className="text-xs text-gray-600 dark:text-gray-400 truncate mt-0.5">
+          <div className="text-xs text-gray-500 dark:text-gray-400 truncate mt-1.5 leading-relaxed">
             {event.description}
           </div>
         )}
-        <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+        <div className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 mt-2 uppercase tracking-wide">
           {formatTimeRange()}
         </div>
       </div>
@@ -74,12 +75,12 @@ export function EventBlock({ event, onEdit }: EventBlockProps) {
         onClick={handleDelete}
         className="
           flex-shrink-0 opacity-0 group-hover:opacity-100
-          p-1 rounded hover:bg-red-100 dark:hover:bg-red-900
-          transition-opacity
+          p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30
+          transition-all duration-200
         "
         aria-label="Delete event"
       >
-        <X size={14} className="text-red-500" />
+        <X size={14} className="text-red-500 dark:text-red-400" />
       </button>
     </div>
   );
