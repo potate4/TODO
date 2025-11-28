@@ -58,6 +58,16 @@ export const DAY_LABELS: Record<DayOfWeek, { full: string; short: string }> = {
   fri: { full: 'Friday', short: 'Fri' },
 };
 
+export interface PredefinedTask {
+  id: string;
+  title: string;
+  description?: string;
+  color: string;       // hex color code
+  category?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export const DEFAULT_TASK_COLORS = [
   '#ef4444', // red
   '#f97316', // orange

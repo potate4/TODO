@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import type { Task, DayOfWeek, Event } from '../types/planner';
+import type { Task, DayOfWeek, Event, PredefinedTask } from '../types/planner';
 import { useLocalStorage, useEventsStorage } from '../hooks/useLocalStorage';
+import { usePredefinedTasks } from '../hooks/usePredefinedTasks';
 import { getWeekStart, getPreviousWeek, getNextWeek, getDateForDay, formatDateISO } from '../utils/dateUtils';
 
 interface PlannerContextType {
@@ -54,6 +55,19 @@ interface PlannerContextType {
     startTime?: string,
     endTime?: string
   ) => Event;
+
+  // Predefined Tasks
+  predefinedTasks: PredefinedTask[];
+  addPredefinedTask: (task: PredefinedTask) => void;
+  updatePredefinedTask: (id: string, updates: Partial<PredefinedTask>) => void;
+  deletePredefinedTask: (id: string) => void;
+  createPredefinedTask: (
+    title: string,
+    color?: string,
+    description?: string,
+    category?: string
+  ) => PredefinedTask;
+  createTaskFromPredefined: (predefinedTask: PredefinedTask, day: DayOfWeek, date: Date, timeSlot: string) => Task;
 }
 
 const PlannerContext = createContext<PlannerContextType | undefined>(undefined);
@@ -92,6 +106,13 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     updateEvent,
     deleteEvent,
   } = useEventsStorage();
+
+  const {
+    tasks: predefinedTasks,
+    addTask: addPredefinedTask,
+    updateTask: updatePredefinedTask,
+    deleteTask: deletePredefinedTask,
+  } = usePredefinedTasks();
 
   const goToWeek = useCallback((weekStart: Date) => {
     const today = new Date();
@@ -259,6 +280,42 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  const createPredefinedTask = useCallback(
+    (
+      title: string,
+      color: string = '#3b82f6',
+      description?: string,
+      category?: string
+    ): PredefinedTask => {
+      const now = new Date();
+      return {
+        id: `predefined-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        title,
+        description,
+        color,
+        category,
+        createdAt: now,
+        updatedAt: now,
+      };
+    },
+    []
+  );
+
+  const createTaskFromPredefined = useCallback(
+    (predefinedTask: PredefinedTask, day: DayOfWeek, date: Date, timeSlot: string): Task => {
+      return createTask(
+        predefinedTask.title,
+        day,
+        date,
+        timeSlot,
+        predefinedTask.color,
+        predefinedTask.description,
+        predefinedTask.category
+      );
+    },
+    [createTask]
+  );
+
   const displayDates = getDisplayDates();
   const maxOffset = Math.max(0, selectedDates.length - 5);
   const hasMoreDays = currentOffset < maxOffset;
@@ -290,6 +347,12 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     deleteEvent,
     getEventsForDay,
     createEvent,
+    predefinedTasks,
+    addPredefinedTask,
+    updatePredefinedTask,
+    deletePredefinedTask,
+    createPredefinedTask,
+    createTaskFromPredefined,
   };
 
   return (

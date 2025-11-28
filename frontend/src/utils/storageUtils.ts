@@ -1,7 +1,8 @@
-import type { Task, WeekData, Event } from '../types/planner';
+import type { Task, WeekData, Event, PredefinedTask } from '../types/planner';
 
 const STORAGE_KEY = 'weekly-planner-data';
 const EVENTS_STORAGE_KEY = 'weekly-planner-events';
+const PREDEFINED_TASKS_STORAGE_KEY = 'weekly-planner-predefined-tasks';
 
 /**
  * Save tasks to localStorage
@@ -98,6 +99,37 @@ export function loadEventsFromStorage(): Event[] {
     })) as Event[];
   } catch (error) {
     console.error('Failed to load events from localStorage:', error);
+    return [];
+  }
+}
+
+export function savePredefinedTasksToStorage(tasks: PredefinedTask[]): void {
+  try {
+    const serialized = JSON.stringify(tasks.map(task => ({
+      ...task,
+      createdAt: task.createdAt.toISOString(),
+      updatedAt: task.updatedAt.toISOString(),
+    })));
+    localStorage.setItem(PREDEFINED_TASKS_STORAGE_KEY, serialized);
+  } catch (error) {
+    console.error('Failed to save predefined tasks to localStorage:', error);
+  }
+}
+
+export function loadPredefinedTasksFromStorage(): PredefinedTask[] {
+  try {
+    const serialized = localStorage.getItem(PREDEFINED_TASKS_STORAGE_KEY);
+    if (!serialized) {
+      return [];
+    }
+    const data = JSON.parse(serialized);
+    return data.map((task: any) => ({
+      ...task,
+      createdAt: new Date(task.createdAt),
+      updatedAt: new Date(task.updatedAt),
+    })) as PredefinedTask[];
+  } catch (error) {
+    console.error('Failed to load predefined tasks from localStorage:', error);
     return [];
   }
 }
