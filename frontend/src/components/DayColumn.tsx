@@ -19,7 +19,11 @@ export function DayColumn({ date }: DayColumnProps) {
   const dateStr = formatDateShort(date);
 
   return (
-    <div className="flex flex-col border-r-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 min-h-[calc(100vh-180px)] shadow-md">
+    <div className={`flex flex-col min-h-[calc(100vh-180px)] shadow-md ${
+      isTodayDate 
+        ? 'bg-gradient-to-b from-blue-50/30 via-blue-50/20 to-white dark:from-blue-900/20 dark:via-blue-900/10 dark:to-gray-900 border-l-2 border-r-2 border-blue-300 dark:border-blue-600' 
+        : 'bg-white dark:bg-gray-900 border-r-2 border-gray-300 dark:border-gray-600'
+    }`}>
       {/* Day Header */}
       <div
         className={`
