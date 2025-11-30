@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import type { Task, DayOfWeek, Event, PredefinedTask } from '../types/planner';
 import { useLocalStorage, useEventsStorage } from '../hooks/useLocalStorage';
 import { usePredefinedTasks } from '../hooks/usePredefinedTasks';
@@ -87,27 +87,18 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     return dates;
   }, []);
 
-  // Calculate initial offset to position today as the leftmost visible day
-  const calculateInitialOffset = useCallback((dates: Date[]) => {
+  // Initialize dates and calculate offset to position today as leftmost visible day
+  const initialDates = initializeDates();
+  const calculateInitialOffset = (dates: Date[]) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayStr = formatDateISO(today);
     const todayIndex = dates.findIndex(d => formatDateISO(d) === todayStr);
     return todayIndex !== -1 ? todayIndex : 0;
-  }, []);
+  };
   
-  const initialDates = initializeDates();
   const [selectedDates, setSelectedDates] = useState<Date[]>(initialDates);
   const [currentOffset, setCurrentOffset] = useState(() => calculateInitialOffset(initialDates));
-  
-  // Ensure today is visible on initial load (only run once on mount)
-  useEffect(() => {
-    const dates = initializeDates();
-    setSelectedDates(dates);
-    const offset = calculateInitialOffset(dates);
-    setCurrentOffset(offset);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array - only run on mount
   
   const {
     tasks,
