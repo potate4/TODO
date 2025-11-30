@@ -92,7 +92,15 @@ function AppContent() {
 
   return (
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+      <div 
+        className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950"
+        style={{ 
+          transform: 'scale(0.88)', 
+          transformOrigin: 'top left',
+          width: '113.64%',
+          height: '113.64%'
+        }}
+      >
         <Header />
         <PredefinedTasksPanel />
         <div className="w-full py-6">
