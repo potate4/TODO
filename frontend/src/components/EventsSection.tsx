@@ -35,8 +35,8 @@ export function EventsSection({ day, date }: EventsSectionProps) {
 
   return (
     <>
-      <div className="border-t-2 border-gray-300/60 dark:border-gray-600/60 bg-gradient-to-b from-gray-50/70 via-gray-100/30 to-white dark:from-gray-800/40 dark:via-gray-800/20 dark:to-gray-900 shadow-inner backdrop-blur-sm">
-        <div className="flex items-center justify-between px-4 py-3">
+      <div className="border-t-2 border-gray-300 dark:border-gray-600 bg-gradient-to-b from-gray-50/70 via-gray-100/30 to-white dark:from-gray-800/40 dark:via-gray-800/20 dark:to-gray-900 shadow-inner backdrop-blur-sm h-[200px] flex flex-col">
+        <div className="flex items-center justify-between px-4 py-3 flex-shrink-0">
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all duration-300 hover:scale-105"
@@ -65,7 +65,7 @@ export function EventsSection({ day, date }: EventsSectionProps) {
         </div>
         
         {!isCollapsed && (
-          <div className="px-4 pb-4">
+          <div className="px-4 pb-4 flex-1 overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {events.length > 0 ? (
               <div className="space-y-2">
                 {events.map((event) => (

@@ -225,7 +225,7 @@ export function PredefinedTasksPanel() {
     <>
       <div className="bg-gradient-to-br from-white via-gray-50/30 to-white dark:from-gray-800 dark:via-gray-800/50 dark:to-gray-800 border-b-2 border-gray-200/80 dark:border-gray-600/80 shadow-lg shadow-gray-900/5 dark:shadow-gray-900/30 px-6 py-4 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-extrabold text-gray-900 dark:text-white tracking-tight">Predefined Tasks</h2>
+          <h2 className="text-l font-bold text-gray-900 dark:text-white tracking-tight">Predefined Tasks</h2>
           <button
             onClick={handleAddClick}
             className="px-4 py-2.5 bg-gradient-to-br from-blue-600 via-blue-600 to-blue-700 hover:from-blue-700 hover:via-blue-700 hover:to-blue-800 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 shadow-md shadow-blue-500/30 hover:shadow-lg hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0"

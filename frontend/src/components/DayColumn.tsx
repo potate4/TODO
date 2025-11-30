@@ -32,7 +32,7 @@ export function DayColumn({ date }: DayColumnProps) {
   };
 
   return (
-    <div className={`flex flex-col min-h-[calc(100vh-180px)] shadow-md ${
+    <div className={`flex flex-col h-full ${
       isTodayDate 
         ? 'bg-gradient-to-b from-blue-50/30 via-blue-50/20 to-white dark:from-blue-900/20 dark:via-blue-900/10 dark:to-gray-900 border-l-2 border-r-2 border-blue-300 dark:border-blue-600' 
         : 'bg-white dark:bg-gray-900 border-r-2 border-gray-300 dark:border-gray-600'
@@ -90,7 +90,7 @@ export function DayColumn({ date }: DayColumnProps) {
       </div>
 
       {/* Time Slots */}
-      <div>
+      <div className="flex-1 min-h-0">
         {timeSlots.map((slot) => (
           <TimeSlot
             key={slot.time}
@@ -103,7 +103,9 @@ export function DayColumn({ date }: DayColumnProps) {
       </div>
 
       {/* Events Section */}
-      <EventsSection day={day} date={date} />
+      <div className="flex-shrink-0">
+        <EventsSection day={day} date={date} />
+      </div>
     </div>
   );
 }

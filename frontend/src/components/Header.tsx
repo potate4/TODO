@@ -28,7 +28,7 @@ export function Header() {
 
   return (
     <header className="bg-gradient-to-r from-white via-gray-50/50 to-white dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900 border-b-2 border-gray-200/80 dark:border-gray-700/80 sticky top-0 z-20 shadow-lg shadow-gray-900/5 dark:shadow-gray-900/50 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80">
-      <div className="container mx-auto px-6 py-5">
+      <div className="w-full px-6 py-5">
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1.5">
