@@ -63,14 +63,12 @@ export function TaskBlock({ task, onEdit }: TaskBlockProps) {
       {...attributes}
       style={combinedStyle}
       className={`
-        group relative flex items-center gap-2.5 p-2.5 rounded-lg mb-1.5
-        border-l-[3px] cursor-grab active:cursor-grabbing transition-all duration-200
-        hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20
-        hover:-translate-y-0.5
-        ${isDragging ? 'opacity-50 z-50 scale-95' : ''}
+        group relative flex items-center gap-2.5 p-3 rounded-xl mb-1.5
+        border-l-[4px] cursor-grab active:cursor-grabbing
+        ${isDragging ? 'opacity-50 z-50 scale-95 rotate-1' : 'transition-opacity duration-150'}
         ${task.completed 
-          ? 'opacity-70 border-gray-200 dark:border-gray-700' 
-          : 'border-gray-200 dark:border-gray-700 shadow-sm'
+          ? 'opacity-75 border-gray-300/50 dark:border-gray-600/50 backdrop-blur-sm' 
+          : 'border-gray-200/80 dark:border-gray-700/80 shadow-md shadow-black/5 dark:shadow-black/20 ring-1 ring-gray-200/50 dark:ring-gray-700/30'
         }
       `}
       onClick={(e) => {
@@ -80,22 +78,22 @@ export function TaskBlock({ task, onEdit }: TaskBlockProps) {
         }
       }}
     >
-      <div className="flex-shrink-0 text-gray-300 dark:text-gray-600">
+      <div className="flex-shrink-0 text-gray-300/60 dark:text-gray-600/60 group-hover:text-gray-400 dark:group-hover:text-gray-500 transition-colors">
         <GripVertical size={12} />
       </div>
       <button
         onClick={handleToggleComplete}
         className={`
-          flex-shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center
-          transition-all duration-200
+          flex-shrink-0 w-5 h-5 rounded-lg border-2 flex items-center justify-center
+          transition-all duration-300 hover:scale-110 active:scale-95
           ${task.completed
-            ? 'bg-gradient-to-br from-green-400 to-green-500 border-green-500 text-white shadow-sm'
-            : 'border-gray-300 dark:border-gray-600 hover:border-green-400 hover:bg-green-50 dark:hover:bg-green-900/20'
+            ? 'bg-gradient-to-br from-green-400 via-green-500 to-green-600 border-green-500 text-white shadow-md shadow-green-500/30 ring-2 ring-green-500/20'
+            : 'border-gray-300 dark:border-gray-600 hover:border-green-400 hover:bg-gradient-to-br hover:from-green-50 hover:to-green-100 dark:hover:from-green-900/30 dark:hover:to-green-800/20 hover:ring-2 hover:ring-green-400/20'
           }
         `}
         aria-label={task.completed ? 'Mark as incomplete' : 'Mark as complete'}
       >
-        {task.completed && <Check size={11} strokeWidth={3} />}
+        {task.completed && <Check size={11} strokeWidth={3} className="drop-shadow-sm" />}
       </button>
       
       <div className="flex-1 min-w-0">
@@ -128,8 +126,9 @@ export function TaskBlock({ task, onEdit }: TaskBlockProps) {
         onClick={handleDelete}
         className="
           flex-shrink-0 opacity-0 group-hover:opacity-100
-          p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30
-          transition-all duration-200
+          p-1.5 rounded-lg hover:bg-gradient-to-br hover:from-red-50 hover:to-red-100 dark:hover:from-red-900/30 dark:hover:to-red-800/20
+          transition-all duration-300 hover:scale-110 active:scale-95
+          hover:shadow-sm hover:shadow-red-500/20
         "
         aria-label="Delete task"
       >

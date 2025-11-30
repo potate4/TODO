@@ -58,10 +58,10 @@ export function EventBlock({ event, onEdit }: EventBlockProps) {
       onClick={handleClick}
       className="
         group relative flex items-center gap-3 p-3 rounded-xl mb-2
-        border-l-[3px] cursor-pointer transition-all duration-200
-        hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20
-        hover:-translate-y-0.5
-        border-gray-200 dark:border-gray-700 shadow-sm
+        border-l-[4px] cursor-pointer transition-all duration-300
+        hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/30
+        hover:-translate-y-1 hover:scale-[1.02]
+        border-gray-200/80 dark:border-gray-700/80 shadow-md shadow-black/5 dark:shadow-black/20 ring-1 ring-gray-200/50 dark:ring-gray-700/30
       "
       style={{ 
         borderLeftColor: event.color,
@@ -86,8 +86,9 @@ export function EventBlock({ event, onEdit }: EventBlockProps) {
         onClick={handleDelete}
         className="
           flex-shrink-0 opacity-0 group-hover:opacity-100
-          p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30
-          transition-all duration-200
+          p-1.5 rounded-lg hover:bg-gradient-to-br hover:from-red-50 hover:to-red-100 dark:hover:from-red-900/30 dark:hover:to-red-800/20
+          transition-all duration-300 hover:scale-110 active:scale-95
+          hover:shadow-sm hover:shadow-red-500/20
         "
         aria-label="Delete event"
       >

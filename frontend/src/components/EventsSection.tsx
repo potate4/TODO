@@ -35,11 +35,11 @@ export function EventsSection({ day, date }: EventsSectionProps) {
 
   return (
     <>
-      <div className="border-t-2 border-gray-300 dark:border-gray-600 bg-gradient-to-b from-gray-50/50 to-white dark:from-gray-800/30 dark:to-gray-900 shadow-inner">
+      <div className="border-t-2 border-gray-300/60 dark:border-gray-600/60 bg-gradient-to-b from-gray-50/70 via-gray-100/30 to-white dark:from-gray-800/40 dark:via-gray-800/20 dark:to-gray-900 shadow-inner backdrop-blur-sm">
         <div className="flex items-center justify-between px-4 py-3">
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+            className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all duration-300 hover:scale-105"
           >
             {isCollapsed ? (
               <ChevronDown size={14} />
@@ -52,9 +52,10 @@ export function EventsSection({ day, date }: EventsSectionProps) {
             <button
               onClick={handleAddClick}
               className="
-                p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700
-                transition-all duration-200 text-gray-500 dark:text-gray-400
-                hover:text-gray-700 dark:hover:text-gray-300 hover:scale-110
+                p-1.5 rounded-xl hover:bg-gradient-to-br hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-700 dark:hover:to-gray-600
+                transition-all duration-300 text-gray-500 dark:text-gray-400
+                hover:text-gray-700 dark:hover:text-gray-300 hover:scale-110 active:scale-95
+                shadow-sm hover:shadow-md
               "
               aria-label="Add event"
             >

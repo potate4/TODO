@@ -22,6 +22,7 @@ interface PlannerContextType {
   updateTask: (id: string, updates: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   deleteAllTasks: () => void;
+  deleteTasksForDate: (date: string) => void;
   toggleTaskComplete: (id: string) => void;
   moveTask: (taskId: string, newDay: DayOfWeek, newDate: Date, newTimeSlot: string) => void;
   
@@ -107,6 +108,7 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     updateTask,
     deleteTask,
     deleteAllTasks,
+    deleteTasksForDate: deleteTasksForDateStorage,
     toggleTaskComplete,
     moveTask: moveTaskStorage,
   } = useLocalStorage();
@@ -253,6 +255,13 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     [moveTaskStorage]
   );
 
+  const deleteTasksForDate = useCallback(
+    (date: string) => {
+      deleteTasksForDateStorage(date);
+    },
+    [deleteTasksForDateStorage]
+  );
+
   const getEventsForDay = useCallback(
     (day: DayOfWeek, date: Date): Event[] => {
       const dateStr = formatDateISO(date);
@@ -346,6 +355,7 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     updateTask,
     deleteTask,
     deleteAllTasks,
+    deleteTasksForDate,
     toggleTaskComplete,
     moveTask,
     getTasksForDay,

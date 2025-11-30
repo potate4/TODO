@@ -38,20 +38,21 @@ function AppContent() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    
+    // Always clear active states
     setActiveTask(null);
     setActivePredefinedTask(null);
 
-    if (!over) return;
-
     // Check if it's a predefined task being dropped
     if (typeof active.id === 'string' && active.id.startsWith('predefined-')) {
-      const predefinedId = active.id.replace('predefined-', '');
-      const predefinedTask = predefinedTasks.find(t => t.id === predefinedId);
-      
-      if (predefinedTask) {
-        // Extract day, date, and timeSlot from the droppable ID
-        const dropId = over.id as string;
-        if (typeof dropId === 'string' && dropId.startsWith('drop-')) {
+      // If dropped on a valid target, create the task
+      if (over && typeof over.id === 'string' && over.id.startsWith('drop-')) {
+        const predefinedId = active.id.replace('predefined-', '');
+        const predefinedTask = predefinedTasks.find(t => t.id === predefinedId);
+        
+        if (predefinedTask) {
+          // Extract day, date, and timeSlot from the droppable ID
+          const dropId = over.id as string;
           const rest = dropId.substring(5);
           const parts = rest.split('|');
           if (parts.length === 3) {
@@ -66,6 +67,7 @@ function AppContent() {
           }
         }
       }
+      // If not dropped on valid target, just return (predefined task stays in list)
       return;
     }
 
@@ -93,7 +95,7 @@ function AppContent() {
   return (
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div 
-        className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950"
+        className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100/50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950"
         style={{ 
           transform: 'scale(0.88)', 
           transformOrigin: 'top left',
@@ -113,8 +115,17 @@ function AppContent() {
             <TaskBlock task={activeTask} />
           </div>
         ) : activePredefinedTask ? (
-          <div className="opacity-90 p-2.5 rounded-lg border-l-[3px] bg-white dark:bg-gray-800 shadow-lg" style={{ borderLeftColor: activePredefinedTask.color, backgroundColor: `rgba(${parseInt(activePredefinedTask.color.slice(1, 3), 16)}, ${parseInt(activePredefinedTask.color.slice(3, 5), 16)}, ${parseInt(activePredefinedTask.color.slice(5, 7), 16)}, 0.1)` }}>
+          <div 
+            className="opacity-95 p-3 rounded-xl border-l-[4px] bg-white dark:bg-gray-800 shadow-2xl shadow-black/20 dark:shadow-black/40 ring-2 ring-gray-200/50 dark:ring-gray-700/30 rotate-2 scale-105" 
+            style={{ 
+              borderLeftColor: activePredefinedTask.color, 
+              backgroundColor: `rgba(${parseInt(activePredefinedTask.color.slice(1, 3), 16)}, ${parseInt(activePredefinedTask.color.slice(3, 5), 16)}, ${parseInt(activePredefinedTask.color.slice(5, 7), 16)}, 0.15)` 
+            }}
+          >
             <div className="text-sm font-semibold text-gray-800 dark:text-gray-100">{activePredefinedTask.title}</div>
+            {activePredefinedTask.description && (
+              <div className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{activePredefinedTask.description}</div>
+            )}
           </div>
         ) : null}
       </DragOverlay>

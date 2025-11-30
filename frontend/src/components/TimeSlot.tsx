@@ -49,14 +49,14 @@ export function TimeSlot({ day, date, timeSlot, label }: TimeSlotProps) {
         ref={setNodeRef}
         onClick={visibleTasks.length === 0 ? handleAddClick : undefined}
         className={`
-          border-b border-gray-200 dark:border-gray-700 h-[72px] px-3 py-2.5
-          transition-all duration-150 group overflow-hidden
-          ${isOver ? 'bg-blue-50/80 dark:bg-blue-900/20 border-blue-300 dark:border-blue-600' : 'hover:bg-gray-50/60 dark:hover:bg-gray-800/30'}
+          border-b border-gray-200/60 dark:border-gray-700/60 h-[72px] px-3 py-2.5
+          transition-all duration-300 group overflow-hidden
+          ${isOver ? 'bg-gradient-to-r from-blue-50/90 via-blue-100/50 to-transparent dark:from-blue-900/30 dark:via-blue-800/20 dark:to-transparent border-blue-400/50 dark:border-blue-500/50 shadow-inner' : 'hover:bg-gradient-to-r hover:from-gray-50/80 hover:via-gray-100/40 hover:to-transparent dark:hover:from-gray-800/40 dark:hover:via-gray-700/20 dark:hover:to-transparent'}
           ${visibleTasks.length === 0 ? 'cursor-pointer' : ''}
         `}
       >
         <div className="flex items-start gap-3 h-full">
-          <div className="flex-shrink-0 w-16 text-xs text-gray-400 dark:text-gray-500 font-semibold tracking-wide pt-0.5">
+          <div className="flex-shrink-0 w-16 text-xs text-gray-500 dark:text-gray-400 font-bold tracking-wider pt-0.5 uppercase">
             {label}
           </div>
           
@@ -81,12 +81,13 @@ export function TimeSlot({ day, date, timeSlot, label }: TimeSlotProps) {
                 className="
                   w-full h-full opacity-0 group-hover:opacity-100
                   flex items-center justify-center gap-1.5
-                  px-3 py-2 rounded-lg text-xs font-medium text-gray-400 dark:text-gray-500
-                  transition-all duration-200 pointer-events-none
-                  bg-gray-50/50 dark:bg-gray-800/30
+                  px-3 py-2 rounded-xl text-xs font-semibold text-gray-500 dark:text-gray-400
+                  transition-all duration-300 pointer-events-none
+                  bg-gradient-to-br from-gray-100/60 to-gray-50/40 dark:from-gray-800/40 dark:to-gray-700/20
+                  border border-dashed border-gray-300/50 dark:border-gray-600/50
                 "
               >
-                <Plus size={14} />
+                <Plus size={14} className="text-gray-400 dark:text-gray-500" />
                 <span>Click to add task</span>
               </div>
             )}
