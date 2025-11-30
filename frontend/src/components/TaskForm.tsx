@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import type { Task, DayOfWeek } from '../types/planner';
 import { DEFAULT_TASK_COLORS } from '../types/planner';
@@ -19,6 +20,7 @@ export function TaskForm({ task, day, date, timeSlot, onClose }: TaskFormProps) 
   const [description, setDescription] = useState(task?.description || '');
   const [color, setColor] = useState(task?.color || DEFAULT_TASK_COLORS[4]);
   const [category, setCategory] = useState(task?.category || '');
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (task) {
@@ -28,6 +30,14 @@ export function TaskForm({ task, day, date, timeSlot, onClose }: TaskFormProps) 
       setCategory(task.category || '');
     }
   }, [task]);
+
+  useEffect(() => {
+    // Prevent body scroll when dialog is open
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,13 +77,14 @@ export function TaskForm({ task, day, date, timeSlot, onClose }: TaskFormProps) 
     }
   };
 
-  return (
+  const dialogContent = (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
       onClick={handleOverlayClick}
     >
       <div
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6"
+        ref={dialogRef}
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
@@ -178,5 +189,7 @@ export function TaskForm({ task, day, date, timeSlot, onClose }: TaskFormProps) 
       </div>
     </div>
   );
+
+  return createPortal(dialogContent, document.body);
 }
 

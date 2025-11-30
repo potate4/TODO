@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Plus, X, GripVertical } from 'lucide-react';
 import { useDraggable } from '@dnd-kit/core';
 import type { PredefinedTask } from '../types/planner';
@@ -40,11 +41,11 @@ function PredefinedTaskItem({ task, onEdit, onDelete }: PredefinedTaskItemProps)
         transition: isDragging ? 'none' : 'opacity 150ms ease-out',
       };
 
-  const combinedStyle = {
+  const combinedStyle: React.CSSProperties = {
     ...dragStyle,
     borderLeftColor: task.color,
     backgroundColor: hexToRgba(task.color, 0.1),
-    pointerEvents: isDragging ? 'none' : 'auto',
+    pointerEvents: isDragging ? ('none' as const) : ('auto' as const),
   };
 
   return (
@@ -59,7 +60,7 @@ function PredefinedTaskItem({ task, onEdit, onDelete }: PredefinedTaskItemProps)
         ${isDragging ? 'opacity-0' : 'opacity-100 hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/30 hover:-translate-y-1 hover:scale-[1.02]'}
         border-gray-200/80 dark:border-gray-700/80 shadow-md shadow-black/5 dark:shadow-black/20 ring-1 ring-gray-200/50 dark:ring-gray-700/30
       `}
-      onClick={(e) => {
+      onClick={() => {
         // Only edit if not dragging
         if (!isDragging) {
           onEdit(task);
@@ -113,6 +114,15 @@ function PredefinedTaskForm({ task, onClose }: PredefinedTaskFormProps) {
   const [description, setDescription] = useState(task?.description || '');
   const [color, setColor] = useState(task?.color || DEFAULT_TASK_COLORS[4]);
   const [category, setCategory] = useState(task?.category || '');
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Prevent body scroll when dialog is open
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,10 +137,11 @@ function PredefinedTaskForm({ task, onClose }: PredefinedTaskFormProps) {
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={onClose}>
+  const dialogContent = (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
       <div
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 w-full max-w-md"
+        ref={dialogRef}
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
@@ -199,6 +210,8 @@ function PredefinedTaskForm({ task, onClose }: PredefinedTaskFormProps) {
       </div>
     </div>
   );
+
+  return createPortal(dialogContent, document.body);
 }
 
 export function PredefinedTasksPanel() {
